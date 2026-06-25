@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - master
+
+jobs:
+  lint-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies and pylint
+        working-directory: QuakeWatch
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pylint
+
+      - name: Run pylint
+        working-directory: QuakeWatch
+        run: |
+          pylint *.py
+
+      - name: Build Docker image
+        run: |
+          docker build -t quakewatch-ci:latest ./QuakeWatch
