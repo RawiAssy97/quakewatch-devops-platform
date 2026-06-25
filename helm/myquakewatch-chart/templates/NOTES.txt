@@ -1,0 +1,47 @@
+QuakeWatch has been deployed successfully using Helm.
+
+Release name:
+{{ .Release.Name }}
+
+Namespace:
+{{ .Release.Namespace }}
+
+Check Helm release:
+helm list
+helm status {{ .Release.Name }}
+
+Check Kubernetes resources:
+kubectl get all
+kubectl get deployments
+kubectl get replicasets
+kubectl get pods
+kubectl get svc
+kubectl get cronjobs
+kubectl get hpa
+kubectl get configmaps
+kubectl get secrets
+
+Check QuakeWatch Pods:
+kubectl get pods -l app=quakewatch
+
+Access the application locally:
+kubectl port-forward service/quakewatch-service 8080:80
+
+Then open:
+http://localhost:8080
+
+Check the CronJob:
+kubectl get cronjobs
+kubectl get jobs
+
+Run a manual CronJob health check:
+kubectl create job --from=cronjob/quakewatch-health-check quakewatch-health-check-manual
+
+Check the manual Job logs:
+kubectl logs job/quakewatch-health-check-manual
+
+Delete the manual test Job:
+kubectl delete job quakewatch-health-check-manual
+
+Uninstall the Helm release:
+helm uninstall {{ .Release.Name }}

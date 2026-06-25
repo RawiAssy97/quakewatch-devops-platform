@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quakewatch-deployment
+  labels:
+    app: quakewatch
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: quakewatch
+  template:
+    metadata:
+      labels:
+        app: quakewatch
+    spec:
+      containers:
+        - name: quakewatch
+          image: rawiassy97/quakewatch:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+
+          envFrom: # ADDED for ConfigMap/Secret: load environment variables into the container
+            - configMapRef: # ADDED for ConfigMap: get non-sensitive config values
+                name: quakewatch-config # ADDED for ConfigMap: name of the ConfigMap manifest
+            - secretRef: # ADDED for Secret: get sensitive-style config values
+                name: quakewatch-secret # ADDED for Secret: name of the Secret manifest
+
+          resources: # ADDED for HPA: define CPU/memory requests and limits
+            requests: # ADDED for HPA: minimum resources reserved for each Pod
+              cpu: "100m" # ADDED for HPA: each Pod requests 0.1 CPU
+              memory: "128Mi" # ADDED: each Pod requests 128Mi memory
+            limits: # ADDED: maximum resources each Pod can use
+              cpu: "500m" # ADDED: each Pod can use up to 0.5 CPU
+              memory: "256Mi" # ADDED: each Pod can use up to 256Mi memory
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 3
+            failureThreshold: 3

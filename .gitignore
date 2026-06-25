@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.venv/
+
+# Environment/secrets
+.env
+*.env
+
+# IDE
+.idea/
+.vscode/
+
+# Helm packaged charts
+*.tgz
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Docker/local exports
+*.tar

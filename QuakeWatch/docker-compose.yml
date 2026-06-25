@@ -1,0 +1,8 @@
+services:
+  quakewatch:
+    build: .
+    image: rawiassy97/quakewatch:v1
+    container_name: quakewatch
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
