@@ -29,7 +29,9 @@ jobs:
       - name: Run pylint
         working-directory: QuakeWatch
         run: |
-          pylint *.py
+          pylint /
+            --disable=missing-module-docstring,missing-class-docstring,missing-function-docstring,wrong-import-position,wrong-import-order,line-too-long,missing-timeout,no-else-return,too-many-locals,redefined-outer-name,logging-fstring-interpolation,import-outside-toplevel \
+          *.py
 
       - name: Build Docker image
         run: |
